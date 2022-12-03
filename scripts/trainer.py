@@ -24,6 +24,7 @@ def test_loop(dataloader, model, loss_fn):
     with torch.no_grad():
         for X, y in dataloader:
             pred = model(X)
+            # print(pred.argmax(1))
             test_loss += loss_fn(pred, y).item()
             correct += (pred.argmax(1) == y).type(torch.float).sum().item()  # pred.argmax(1) equals softmax(pred).argmax(1)
 

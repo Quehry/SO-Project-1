@@ -9,13 +9,11 @@ class E3Model(nn.Module):
             nn.ReLU(),
             nn.Linear(512, 512),
             nn.ReLU(),
-            nn.Linear(512, 512),
-            nn.ReLU(),
             nn.Linear(512, 3),
         )
         self.seed = seed
         self.set_seed()
-        self.reset_parameters()
+        # self.reset_parameters()
         
     def forward(self, x):
         logits = self.linear_relu_stack(x)
@@ -27,8 +25,10 @@ class E3Model(nn.Module):
     def reset_parameters(self):
         for layer in self.linear_relu_stack:
             if type(layer) == nn.Linear:
+                # nn.init.xavier_normal_(layer.weight, gain=1)
+                # nn.init.xavier_normal_(layer.bias, gain=1)
                 nn.init.normal_(layer.weight, std=0.01)
-                nn.init.normal_(layer.bias, std=0.01)
+                # nn.init.normal_(layer.bias, std=0.01)
 
 if __name__ == "__main__":
     model = E3Model()
