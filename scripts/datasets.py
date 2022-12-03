@@ -3,19 +3,21 @@ import torch
 
 
 class E3Datasets(Dataset):
-    def __init__(self, num=1000, type='train', device='cuda'):
+    def __init__(self, num=1000, type='train', device='cuda', seed=42):
         self.num = num
         self.type = type
         self.device = device
+        self.seed = seed
+        self.set_seed()
         self.feature, self.label = self.create_data()
 
 
     def create_data(self):
         x = torch.rand([self.num, 2], dtype=torch.float) * 3
         p = torch.rand([self.num, 2]) > 0.5
-        x[p] = x[p] *-1
-        e1 = torch.abs(x[:,0]-1.5)+torch.abs(x[:,1])< 1
-        e2 = torch.sqrt(torch.pow(x[:,0]+1,2)+torch.pow(x[:,1]-1,2)) < 1
+        x[p] = x[p] * -1
+        e1 = torch.abs(x[:,0]-1.5) + torch.abs(x[:,1]) < 1
+        e2 = torch.sqrt(torch.pow(x[:,0]+1,2) + torch.pow(x[:,1]-1,2)) < 1
         y = torch.zeros(self.num, dtype=torch.long)
         for index in range(self.num):
             if e1[index]:
@@ -35,7 +37,8 @@ class E3Datasets(Dataset):
     def __getitem__(self, index):
         return self.feature[index], self.label[index]
 
-
+    def set_seed(self):
+        torch.manual_seed(self.seed)
 
 
 if __name__ == "__main__":
