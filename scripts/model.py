@@ -1,5 +1,6 @@
 from torch import nn
 import torch
+import math
 
 class E3Model(nn.Module):
     def __init__(self, seed=47):
@@ -13,7 +14,7 @@ class E3Model(nn.Module):
         )
         self.seed = seed
         self.set_seed()
-        # self.reset_parameters()
+        self.reset_parameters(2)
         
     def forward(self, x):
         logits = self.linear_relu_stack(x)
@@ -22,14 +23,33 @@ class E3Model(nn.Module):
     def set_seed(self):
         torch.manual_seed(self.seed)
 
-    def reset_parameters(self):
+    def reset_parameters(self, init):
         for layer in self.linear_relu_stack:
             if type(layer) == nn.Linear:
-                # nn.init.xavier_normal_(layer.weight, gain=1)
-                # nn.init.xavier_normal_(layer.bias, gain=1)
-                nn.init.normal_(layer.weight, std=0.01)
-                # nn.init.normal_(layer.bias, std=0.01)
+
+                if init==0:
+                    nn.init.kaiming_normal_(layer.weight, a=math.sqrt(5))
+                    if layer.bias is not None:
+                        fan_in, _ = nn.init._calculate_fan_in_and_fan_out(layer.weight)
+                        bound = 1 / math.sqrt(fan_in)
+                        nn.init.uniform_(layer.bias, -bound, bound)
+                
+                if init==1:
+                    nn.init.xavier_normal_(layer.weight, gain=nn.init.calculate_gain('relu'))
+                    if layer.bias is not None:
+                        fan_in, _ = nn.init._calculate_fan_in_and_fan_out(layer.weight)
+                        bound = 1 / math.sqrt(fan_in)
+                        nn.init.uniform_(layer.bias, -bound, bound)
+
+                if init==2:
+                    nn.init.normal_(layer.weight, std=0.1)
+                    if layer.bias is not None:
+                        fan_in, _ = nn.init._calculate_fan_in_and_fan_out(layer.weight)
+                        bound = 1 / math.sqrt(fan_in)
+                        nn.init.uniform_(layer.bias, -bound, bound)
+                
+
 
 if __name__ == "__main__":
     model = E3Model()
-    print(model.linear_relu_stack[2].bias.data)
+    print(model.linear_relu_stack[2].weight.data)

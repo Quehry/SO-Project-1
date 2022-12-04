@@ -32,6 +32,7 @@ class E3Datasets(Dataset):
     #     return x, y
 
     def create_data(self):
+        self.divide_num = int(self.num / 3)
         x1 = torch.tensor([1.5,0],dtype=torch.float).reshape(1,2)
         while True:
             tmp = torch.rand([self.num, 2], dtype=torch.float) * 3
@@ -40,7 +41,8 @@ class E3Datasets(Dataset):
             e1 = torch.abs(tmp[:,0]-1.5) + torch.abs(tmp[:,1]) < 1
             tmp = tmp[e1]
             x1 = torch.concat([x1,tmp], dim=0)
-            if x1.shape[0] > self.num / 3:
+            if x1.shape[0] > self.divide_num:
+                x1 = x1[:self.divide_num,:]
                 break
         y1 = torch.zeros(x1.shape[0], dtype=torch.long)
 
@@ -52,7 +54,8 @@ class E3Datasets(Dataset):
             e2 = torch.sqrt(torch.pow(tmp[:,0]+1,2) + torch.pow(tmp[:,1]-1,2)) < 1
             tmp = tmp[e2]
             x2 = torch.concat([x2,tmp], dim=0)
-            if x2.shape[0] > self.num / 3:
+            if x2.shape[0] > self.divide_num:
+                x2 = x2[:self.divide_num]
                 break
         y2 = torch.ones(x2.shape[0], dtype=torch.long)
 
@@ -69,22 +72,21 @@ class E3Datasets(Dataset):
                     e3_list.append(index)
             tmp = tmp[e3_list]
             x3 = torch.concat([x3,tmp], dim=0)
-            if x3.shape[0] > self.num / 3:
+            if x3.shape[0] > self.divide_num:
+                x3 = x3[:self.divide_num]
                 break
         y3 = torch.ones(x3.shape[0], dtype=torch.long)
         y3 *= 2 
 
         x = torch.concat([x1,x2,x3],dim=0)
         y = torch.concat([y1,y2,y3],dim=0)
-        print(x.shape)
-        print(y.shape)
         if self.device == 'cuda':
             x = x.to(self.device)
             y = y.to(self.device, dtype=torch.long)
         return x, y
 
     def __len__(self):
-        return self.num
+        return self.divide_num * 3
     
     def __getitem__(self, index):
         return self.feature[index], self.label[index]
