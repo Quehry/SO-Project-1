@@ -1,4 +1,11 @@
-import torch
+# -*-coding:utf-8 -*-
+"""
+Chinese Name: Que Haoran/Song Zhenghao/Cai Zhuojiang/Ji Yuwen
+French Name: Francis/Herve/Evan/Neo
+Student Number: SY2224124/ZY2224114/ZY2224102/ZY2224109
+Date: 2022/12/3
+"""
+
 from scripts.trainer import train_loop, test_loop
 from matplotlib import pyplot as plt
 from IPython import display
@@ -11,7 +18,7 @@ def test_batch_size(train_data, test_data, model, loss_fn, optimizer, num_epochs
     batch_size_list = [8,16,32,64]
 
     for i, batch_size in enumerate(batch_size_list):
-        model.reset_parameters()
+        model.reset_parameters(init=0)
         train_dataloader = DataLoader(train_data, batch_size=batch_size, shuffle=True)
         test_dataloader = DataLoader(test_data, batch_size=batch_size, shuffle=False)
         for _ in range(num_epochs):

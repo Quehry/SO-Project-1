@@ -1,8 +1,14 @@
-import torch
+# -*-coding:utf-8 -*-
+"""
+Chinese Name: Que Haoran/Song Zhenghao/Cai Zhuojiang/Ji Yuwen
+French Name: Francis/Herve/Evan/Neo
+Student Number: SY2224124/ZY2224114/ZY2224102/ZY2224109
+Date: 2022/12/3
+"""
+
 from scripts.trainer import train_loop, test_loop
 from matplotlib import pyplot as plt
 from IPython import display
-from torch.utils.data import DataLoader
 
 def test_initialisation(train_dataloader, test_dataloader, model, loss_fn, optimizer, num_epochs):
     lr_test_loss = [[]for _ in range(3)]

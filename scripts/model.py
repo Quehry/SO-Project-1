@@ -1,3 +1,11 @@
+# -*-coding:utf-8 -*-
+"""
+Chinese Name: Que Haoran/Song Zhenghao/Cai Zhuojiang/Ji Yuwen
+French Name: Francis/Herve/Evan/Neo
+Student Number: SY2224124/ZY2224114/ZY2224102/ZY2224109
+Date: 2022/12/3
+"""
+
 from torch import nn
 import torch
 import math
@@ -48,8 +56,6 @@ class E3Model(nn.Module):
                         bound = 1 / math.sqrt(fan_in)
                         nn.init.uniform_(layer.bias, -bound, bound)
                 
-
-
 if __name__ == "__main__":
     model = E3Model()
     print(model.linear_relu_stack[2].weight.data)

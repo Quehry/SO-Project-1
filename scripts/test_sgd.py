@@ -1,3 +1,11 @@
+# -*-coding:utf-8 -*-
+"""
+Chinese Name: Que Haoran/Song Zhenghao/Cai Zhuojiang/Ji Yuwen
+French Name: Francis/Herve/Evan/Neo
+Student Number: SY2224124/ZY2224114/ZY2224102/ZY2224109
+Date: 2022/12/3
+"""
+
 import torch
 from scripts.trainer import train_loop, test_loop
 from matplotlib import pyplot as plt

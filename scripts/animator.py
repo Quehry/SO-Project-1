@@ -1,3 +1,11 @@
+# -*-coding:utf-8 -*-
+"""
+Chinese Name: Que Haoran/Song Zhenghao/Cai Zhuojiang/Ji Yuwen
+French Name: Francis/Herve/Evan/Neo
+Student Number: SY2224124/ZY2224114/ZY2224102/ZY2224109
+Date: 2022/12/3
+"""
+
 from matplotlib import pyplot as plt
 from matplotlib_inline import backend_inline
 from IPython import display
@@ -5,21 +13,6 @@ from IPython import display
 def use_svg_display():
     """Use the svg format to display a plot in Jupyter"""
     backend_inline.set_matplotlib_formats('svg')
-
-
-class Accumulator:
-    def __init__(self, n):
-        self.data = [0.0] * n
-
-    def add(self, *args):
-        self.data = [a + float(b) for a, b in zip(self.data, args)]
-
-    def reset(self):
-        self.data = [0.0] * len(self.data)
-
-    def __getitem__(self, idx):
-        return self.data[idx]
-
 
 class Animator:  
     def __init__(self, xlabel=None, ylabel=None, legend=None, xlim=None,

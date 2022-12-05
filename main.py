@@ -1,3 +1,11 @@
+# -*-coding:utf-8 -*-
+"""
+Chinese Name: Que Haoran/Song Zhenghao/Cai Zhuojiang/Ji Yuwen
+French Name: Francis/Herve/Evan/Neo
+Student Number: SY2224124/ZY2224114/ZY2224102/ZY2224109
+Date: 2022/12/3
+"""
+
 from scripts.datasets import E3Datasets
 from scripts.model import E3Model
 from scripts.trainer import train_epoch
@@ -6,6 +14,7 @@ from scripts.test_sgd import test_sgd
 from scripts.test_batch_size import test_batch_size
 from scripts.test_initialisation import test_initialisation
 from scripts.visualisation import visualisation_results
+from scripts.test_optimizer import test_optimizer
 from torch.utils.data import DataLoader
 import torch
 from torch import nn
@@ -21,6 +30,7 @@ if __name__ == "__main__":
     test_SGD = False
     bool_test_batch_size = False
     bool_test_initialisation = False
+    bool_test_optimizer = False
 
     # create train and test data for e3 task
     train_data = E3Datasets(num=int(datasets_num*0.7), type='train', device=device, seed=seed)
@@ -48,19 +58,17 @@ if __name__ == "__main__":
         if bool_test_initialisation:
             lr_test_loss, lr_test_acc = test_initialisation(train_dataloader, test_dataloader, model, loss_fn, optimizer, num_epochs)
 
-        
+        if bool_test_optimizer:
+            lr_test_loss, lr_test_acc = test_optimizer(train_dataloader, test_dataloader, model, loss_fn, num_epochs)
+
         # create accumulator and animator
-        # animator = Animator(xlabel="epoch", xlim=[1,num_epochs],legend=["train_loss", "test_loss", "train_acc", "test_acc"],nrows=2,ncols=1, figsize=[14, 10])
-        # train_epoch(train_dataloader, test_dataloader, model, loss_fn, optimizer, num_epochs, animator)
+        animator = Animator(xlabel="epoch", xlim=[1,num_epochs],legend=["train_loss", "test_loss", "train_acc", "test_acc"], nrows=2, ncols=1, figsize=[14, 10])
+        train_epoch(train_dataloader, test_dataloader, model, loss_fn, optimizer, num_epochs, animator)
         # torch.save(model.state_dict(), '/root/autodl-tmp/models/base.pth')
 
     # eval
     if not train:
-        model.load_state_dict(torch.load('model_weights.pth'))
+        model.load_state_dict(torch.load('models/base.pth'))
         model.eval()
 
-        visualisation_results(test_dataloader, model) #TODO
-
-        input = torch.tensor([1,-1,-1,1,1.5,0.1], dtype=torch.float).reshape(3,2).to(device=device)
-        print(input)
-        print(model(input).argmax(dim=1))
+        visualisation_results(test_dataloader, model) 
